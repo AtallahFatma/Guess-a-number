@@ -12,6 +12,7 @@ function Card(props) {
 
 const styles = StyleSheet.create({
     card: {
+        padding: 20,
         margin: 20,
         alignItems: 'center',
         shadowRadius: 6,
