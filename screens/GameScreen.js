@@ -4,7 +4,7 @@ import Card from '../components/Card';
 import MainButton from '../components/MainButton';
 import NumberContainer from '../components/NumberContainer';
 import TitleText from '../components/TitleText';
-import colors from '../config/colors';
+import { AntDesign } from '@expo/vector-icons';
 
 const generateRandomBetween = (min, max, exclude) => {
     min = Math.ceil(min);
@@ -63,10 +63,10 @@ function GameScreen(props) {
             <NumberContainer>{currentGuess}</NumberContainer>
             <Card style={styles.buttonContainer}>
                 <MainButton onPressButton={nextGuessHandler.bind(this, 'lower')} >
-                    LOWER
+                    <AntDesign name="minuscircleo" size={24} color="white" />
                 </MainButton>
                 <MainButton onPressButton={nextGuessHandler.bind(this, 'greater')}>
-                    GREATER
+                    <AntDesign name="pluscircleo" size={24} color="white" />
                 </MainButton>
             </Card>
         </View>
