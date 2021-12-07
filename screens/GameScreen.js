@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Alert, Button, StyleSheet, Text, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Card from '../components/Card';
 import MainButton from '../components/MainButton';
 import NumberContainer from '../components/NumberContainer';
 import TitleText from '../components/TitleText';
 import { AntDesign } from '@expo/vector-icons';
+import BodyText from '../components/BodyText';
+import colors from '../config/colors';
 
 const generateRandomBetween = (min, max, exclude) => {
     min = Math.ceil(min);
@@ -17,9 +19,18 @@ const generateRandomBetween = (min, max, exclude) => {
     }
 }
 
+const renderListItem = (value, numOfRound) => {
+    return <View key={value} style={styles.listItem}>
+        <BodyText>#{numOfRound}</BodyText>
+        <BodyText>{value}</BodyText>
+    </View>
+}
+
 function GameScreen(props) {
-    const [currentGuess, setCurrentGuess] = useState(generateRandomBetween(1, 100, props.userChoise));
-    const [rounds, setRounds] = useState(0);
+    const initialGuess = generateRandomBetween(1, 100, props.userChoise);
+    const [currentGuess, setCurrentGuess] = useState(initialGuess);
+    const [pastGuesses, setPastGuesses] = useState([initialGuess]);
+
     // these values are not rengenerated when component is re-rendered
     const currentLow = useRef(1);
     const currentHigh = useRef(100);
@@ -29,7 +40,7 @@ function GameScreen(props) {
     // always executed after component in rendered
     useEffect(() => {
         if (currentGuess === userChoise) {
-            onGameOver(rounds);
+            onGameOver(pastGuesses.length);
         }
     }, [currentGuess, userChoise, onGameOver]);
 
@@ -46,7 +57,7 @@ function GameScreen(props) {
         if (direction === 'lower') {
             currentHigh.current = currentGuess;
         } else {
-            currentLow.current = currentGuess;
+            currentLow.current = currentGuess + 1;
         }
         const nextNumber = generateRandomBetween(
             currentLow.current,
@@ -54,7 +65,7 @@ function GameScreen(props) {
             currentGuess
         );
         setCurrentGuess(nextNumber);
-        setRounds(curRounds => curRounds + 1)
+        setPastGuesses(curPastGuesses => [nextNumber, ...curPastGuesses])
     }
 
     return (
@@ -69,6 +80,12 @@ function GameScreen(props) {
                     <AntDesign name="pluscircleo" size={24} color="white" />
                 </MainButton>
             </Card>
+            <View style={styles.list}>
+                <ScrollView>
+                    {pastGuesses.map((guess, index) => renderListItem(guess, pastGuesses.length - index))}
+                </ScrollView>
+            </View>
+
         </View>
     );
 }
@@ -88,6 +105,19 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 18
+    },
+    listItem: {
+        borderColor: '#ccc',
+        borderWidth: 1,
+        padding: 15,
+        marginVertical: 10,
+        backgroundColor: colors.white,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    list: {
+        flex: 1,
+        width: '70%'
     }
 })
 export default GameScreen;
