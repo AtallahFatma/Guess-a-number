@@ -6,5 +6,6 @@ export default {
     lightGrey: '#f1f3f4',
     grey: 'grey',
     purpel: '#C717FC',
-    indianPink: '#f7287b'
+    indianPink: '#f7287b',
+    mediumGrey: '#ccc'
 }

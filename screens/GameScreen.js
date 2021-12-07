@@ -80,8 +80,8 @@ function GameScreen(props) {
                     <AntDesign name="pluscircleo" size={24} color="white" />
                 </MainButton>
             </Card>
-            <View style={styles.list}>
-                <ScrollView>
+            <View style={styles.listContainer}>
+                <ScrollView contentContainerStyle={styles.list}>
                     {pastGuesses.map((guess, index) => renderListItem(guess, pastGuesses.length - index))}
                 </ScrollView>
             </View>
@@ -107,17 +107,23 @@ const styles = StyleSheet.create({
         fontSize: 18
     },
     listItem: {
-        borderColor: '#ccc',
+        borderColor: colors.mediumGrey,
         borderWidth: 1,
         padding: 15,
         marginVertical: 10,
         backgroundColor: colors.white,
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        width: '60%',
+    },
+    listContainer: {
+        flex: 1,
+        width: '70%',
     },
     list: {
-        flex: 1,
-        width: '70%'
+        flexGrow: 1,
+        alignItems: 'center',
+        justifyContent: 'flex-end'
     }
 })
 export default GameScreen;
