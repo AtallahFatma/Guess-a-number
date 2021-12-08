@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, Button, TouchableWithoutFeedback, Keyboard, Alert, Dimensions, ScrollView, KeyboardAvoidingView } from 'react-native';
 import colors from '../config/colors';
 import Card from '../components/Card';
@@ -12,6 +12,7 @@ const StartGameScreen = ({ onStartGame }) => {
     const [number, setNumber] = useState('');
     const [confirmed, setConfirmed] = useState(false);
     const [selectedNumber, setSelectedNumber] = useState();
+    const [buttonWidth, setButtonWidth] = useState(Dimensions.get('window').width / 4);
 
     const numberInputHandler = inputText => {
         setNumber(inputText.replace(/[^0-9]/g, '1'));
@@ -21,6 +22,14 @@ const StartGameScreen = ({ onStartGame }) => {
         setNumber('');
         setConfirmed(false);
     };
+
+    useEffect(() => {
+        const updateLayout = () => {
+            setButtonWidth(Dimensions.get('window').width / 4);
+        }
+        const subscription = Dimensions.addEventListener('change', updateLayout);
+        return () => subscription?.remove();
+    })
 
     const confirmInputHandler = () => {
         const chosenNumber = parseInt(number);
@@ -71,13 +80,13 @@ const StartGameScreen = ({ onStartGame }) => {
                                 maxLength={2}
                             />
                             <View style={styles.buttonContainer}>
-                                <View style={styles.button}>
+                                <View style={{ width: buttonWidth }}>
                                     <Button
                                         color={colors.purpel}
                                         title="Reset"
                                         onPress={resetInputHandler} />
                                 </View>
-                                <View>
+                                <View style={{ width: buttonWidth }}>
                                     <Button
                                         color={colors.indianPink}
                                         title="Confirm"
@@ -117,9 +126,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         paddingHorizontal: 15
     },
-    button: {
-        width: Dimensions.get('window').width / 4,
-    },
+    // button: {
+    //     width: Dimensions.get('window').width / 4,
+    // },
     input: {
         width: 80,
         textAlign: 'center'
