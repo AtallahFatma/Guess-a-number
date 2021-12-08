@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, Button, TouchableWithoutFeedback, Keyboard, Alert, Dimensions } from 'react-native';
+import { View, StyleSheet, Text, Button, TouchableWithoutFeedback, Keyboard, Alert, Dimensions, ScrollView, KeyboardAvoidingView } from 'react-native';
 import colors from '../config/colors';
 import Card from '../components/Card';
 import Input from '../components/Input';
@@ -52,40 +52,44 @@ const StartGameScreen = ({ onStartGame }) => {
     }
 
     return (
-        <TouchableWithoutFeedback onPress={() =>
-            Keyboard.dismiss()
-        }>
-            <View style={styles.screen}>
-                <Text style={styles.title}>Start a new game!</Text>
-                <Card style={styles.inputContainer}>
-                    <BodyText>Set a number</BodyText>
-                    <Input
-                        style={styles.input}
-                        value={number}
-                        onChangeText={numberInputHandler}
-                        blurOnSubmit autoCapitalize="none"
-                        autoCorrect={false}
-                        keyboardType="number-pad"
-                        maxLength={2}
-                    />
-                    <View style={styles.buttonContainer}>
-                        <View style={styles.button}>
-                            <Button
-                                color={colors.purpel}
-                                title="Reset"
-                                onPress={resetInputHandler} />
-                        </View>
-                        <View>
-                            <Button
-                                color={colors.indianPink}
-                                title="Confirm"
-                                onPress={confirmInputHandler} />
-                        </View>
+        <ScrollView>
+            <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={30}>
+                <TouchableWithoutFeedback onPress={() =>
+                    Keyboard.dismiss()
+                }>
+                    <View style={styles.screen}>
+                        <Text style={styles.title}>Start a new game!</Text>
+                        <Card style={styles.inputContainer}>
+                            <BodyText>Set a number</BodyText>
+                            <Input
+                                style={styles.input}
+                                value={number}
+                                onChangeText={numberInputHandler}
+                                blurOnSubmit autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="number-pad"
+                                maxLength={2}
+                            />
+                            <View style={styles.buttonContainer}>
+                                <View style={styles.button}>
+                                    <Button
+                                        color={colors.purpel}
+                                        title="Reset"
+                                        onPress={resetInputHandler} />
+                                </View>
+                                <View>
+                                    <Button
+                                        color={colors.indianPink}
+                                        title="Confirm"
+                                        onPress={confirmInputHandler} />
+                                </View>
+                            </View>
+                        </Card>
+                        <View>{confirmedOutput}</View>
                     </View>
-                </Card>
-                <View>{confirmedOutput}</View>
-            </View>
-        </TouchableWithoutFeedback>
+                </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
+        </ScrollView>
     );
 }
 
