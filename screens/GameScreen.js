@@ -30,6 +30,7 @@ function GameScreen(props) {
     const initialGuess = generateRandomBetween(1, 100, props.userChoise);
     const [currentGuess, setCurrentGuess] = useState(initialGuess);
     const [pastGuesses, setPastGuesses] = useState([initialGuess.toString()]);
+    const [availableDeviceHeight, setAvailableDeviceHeight] = useState(Dimensions.get('window').height)
 
     // these values are not rengenerated when component is re-rendered
     const currentLow = useRef(1);
@@ -44,6 +45,14 @@ function GameScreen(props) {
         }
     }, [currentGuess, userChoise, onGameOver]);
 
+    useEffect(() => {
+        const updateLayout = () => {
+            setAvailableDeviceHeight(Dimensions.get('window').height);
+        }
+        const subscription = Dimensions.addEventListener('change', updateLayout);
+        return () => subscription?.remove();
+
+    })
     const nextGuessHandler = direction => {
         if (
             (direction === 'lower' && currentGuess < userChoise) ||
@@ -68,18 +77,35 @@ function GameScreen(props) {
         setPastGuesses(curPastGuesses => [nextNumber.toString(), ...curPastGuesses])
     }
 
+    let content = <>
+        <NumberContainer>{currentGuess}</NumberContainer>
+        <Card style={styles.buttonContainer}>
+            <MainButton onPressButton={nextGuessHandler.bind(this, 'lower')} >
+                <AntDesign name="minuscircleo" size={24} color="white" />
+            </MainButton>
+            <MainButton onPressButton={nextGuessHandler.bind(this, 'greater')}>
+                <AntDesign name="pluscircleo" size={24} color="white" />
+            </MainButton>
+        </Card>
+    </>;
+
+    if (availableDeviceHeight < 500) {
+        content = <View style={styles.constrols}>
+            <MainButton onPressButton={nextGuessHandler.bind(this, 'lower')} >
+                <AntDesign name="minuscircleo" size={24} color="white" />
+            </MainButton>
+            <NumberContainer>{currentGuess}</NumberContainer>
+
+            <MainButton onPressButton={nextGuessHandler.bind(this, 'greater')}>
+                <AntDesign name="pluscircleo" size={24} color="white" />
+            </MainButton>
+        </View>
+    }
+
     return (
         <View style={styles.screen}>
             <TitleText style={styles.text}>Opponent't guess</TitleText>
-            <NumberContainer>{currentGuess}</NumberContainer>
-            <Card style={styles.buttonContainer}>
-                <MainButton onPressButton={nextGuessHandler.bind(this, 'lower')} >
-                    <AntDesign name="minuscircleo" size={24} color="white" />
-                </MainButton>
-                <MainButton onPressButton={nextGuessHandler.bind(this, 'greater')}>
-                    <AntDesign name="pluscircleo" size={24} color="white" />
-                </MainButton>
-            </Card>
+            {content}
             <View style={styles.listContainer}>
                 {/* <ScrollView contentContainerStyle={styles.list}>
                     {pastGuesses.map((guess, index) => renderListItem(guess, pastGuesses.length - index))}
@@ -129,6 +155,12 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         // alignItems: 'center',
         justifyContent: 'flex-end'
+    },
+    constrols: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '80%',
+        alignItems: 'center'
     }
 })
 export default GameScreen;
