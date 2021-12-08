@@ -49,7 +49,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Header title="Guess a number" />
+      <Header title={guessRounds > 0 ? "The Game is over!" : "Guess a number"} />
       {content}
     </View>
   );
