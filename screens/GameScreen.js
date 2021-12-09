@@ -79,7 +79,7 @@ function GameScreen(props) {
 
     let content = <>
         <NumberContainer>{currentGuess}</NumberContainer>
-        <Card style={styles.buttonContainer}>
+        <Card style={[styles.buttonContainer, { marginTop: availableDeviceHeight > 600 ? 30 : 5 }]}>
             <MainButton onPressButton={nextGuessHandler.bind(this, 'lower')} >
                 <AntDesign name="minuscircleo" size={24} color="white" />
             </MainButton>
@@ -130,7 +130,6 @@ const styles = StyleSheet.create({
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        marginTop: Dimensions.get('window').height > 600 ? 30 : 5,
         width: 400,
         maxWidth: '90%'
     },
